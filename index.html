@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a1a1f">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" type="image/svg+xml" href="umely-favicon.svg" />
+  <title>Umely - Bedankt!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    :root {
+      /* Core palette */
+      --charcoal: #0a0a0c;
+      --charcoal-mid: #141417;
+      --charcoal-light: #1c1c21;
+      --cream: #FAF8F5;
+      --beige: #E8E2D9;
+      --orange: #FF6B35;
+      --orange-light: #FF8C5A;
+      --orange-dark: #E55A28;
+      
+      /* Aurora colors - more vibrant but soft */
+      --aurora-1: rgba(255, 107, 53, 0.25);
+      --aurora-2: rgba(255, 160, 90, 0.15);
+      --aurora-3: rgba(232, 226, 217, 0.12);
+      --aurora-4: rgba(255, 140, 70, 0.18);
+      --aurora-glow: rgba(255, 107, 53, 0.4);
+      
+      /* Glass effects */
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-highlight: rgba(255, 255, 255, 0.12);
+      
+      /* Safe areas */
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+      background: var(--charcoal);
+    }
+    
+    body {
+      font-family: 'Outfit', sans-serif;
+      color: white;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* ========== AURORA BACKGROUND ========== */
+    .aurora-container {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background: var(--charcoal);
+      filter: blur(80px); /* Smooth out the gradients even more */
+    }
+    
+    .aurora-layer {
+      position: absolute;
+      width: 140%;
+      height: 140%;
+      top: -20%;
+      left: -20%;
+      mix-blend-mode: screen;
+    }
+    
+    .aurora-1 {
+      background: radial-gradient(circle at 70% 20%, var(--aurora-1) 0%, transparent 60%);
+      animation: aurora-move-1 25s ease-in-out infinite alternate;
+    }
+    
+    .aurora-2 {
+      background: radial-gradient(circle at 20% 80%, var(--aurora-2) 0%, transparent 55%);
+      animation: aurora-move-2 30s ease-in-out infinite alternate;
+    }
+    
+    .aurora-3 {
+      background: radial-gradient(circle at 80% 80%, var(--aurora-3) 0%, transparent 50%);
+      animation: aurora-move-3 35s ease-in-out infinite alternate;
+    }
+    
+    .aurora-4 {
+      background: radial-gradient(circle at 10% 10%, var(--aurora-4) 0%, transparent 60%);
+      animation: aurora-move-4 28s ease-in-out infinite alternate;
+    }
+    
+    @keyframes aurora-move-1 {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      100% { transform: translate(10%, 15%) rotate(10deg) scale(1.1); }
+    }
+    
+    @keyframes aurora-move-2 {
+      0% { transform: translate(0, 0) scale(1.1); }
+      100% { transform: translate(-15%, -10%) scale(1); }
+    }
+    
+    @keyframes aurora-move-3 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(10%, -15%) rotate(-8deg); }
+    }
+    
+    @keyframes aurora-move-4 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-10%, 20%) scale(1.2); }
+    }
+    
+    /* Vignette overlay */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: radial-gradient(circle at center, transparent 20%, var(--charcoal) 100%);
+      pointer-events: none;
+      opacity: 0.8;
+    }
+    
+    /* Noise texture */
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      opacity: 0.02;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+    
+    /* ========== MAIN CONTAINER ========== */
+    .app-container {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: calc(12px + var(--safe-top)) 16px calc(24px + var(--safe-bottom));
+      max-width: 500px;
+      margin: 0 auto;
+      gap: 14px;
+    }
+    
+    /* ========== HEADER ========== */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0;
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--glass-highlight), var(--glass-bg));
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .logo-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+    
+    .logo-text {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+    
+    .header-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.12), rgba(255, 107, 53, 0.06));
+      border: 1px solid rgba(255, 107, 53, 0.2);
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--orange-light);
+      letter-spacing: 0.2px;
+    }
+    
+    .header-badge::before {
+      display: none; /* Removed pulse for more compact look */
+    }
+    
+    @keyframes badge-pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--orange); }
+      50% { opacity: 0.5; box-shadow: 0 0 4px var(--orange); }
+    }
+    
+    /* ========== HERO SECTION ========== */
+    .hero {
+      text-align: center;
+      padding: 2px 0 4px;
+      perspective: 1000px;
+    }
+    
+    .hero-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--glass-highlight), var(--glass-bg));
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      font-size: 24px;
+      margin-bottom: 8px;
+      backdrop-filter: blur(20px);
+      box-shadow: 
+        0 8px 16px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(255, 107, 53, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      animation: hero-icon-float 6s ease-in-out infinite, scaleIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1.2);
+    }
+
+    .hero-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke-width: 2px;
+    }
+    
+    @keyframes hero-icon-float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-4px) rotate(5deg); }
+    }
+    
+    .hero-title {
+      font-size: clamp(1.6rem, 7.5vw, 2rem);
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 6px;
+      letter-spacing: -1px;
+      background: linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #ffffff 60%,
+        var(--orange-light) 85%,
+        var(--orange) 100%
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(255, 107, 53, 0.3));
+      animation: gradient-shift 12s linear infinite, fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    
+    .hero-subtitle {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 500;
+      letter-spacing: 0.1px;
+      max-width: 85%;
+      margin: 0 auto;
+      animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards both;
+    }
+    
+    /* ========== GLASS CARDS BASE ========== */
+    .glass-card {
+      position: relative;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.07) 0%,
+        rgba(255, 255, 255, 0.03) 100%
+      );
+      border: 1px solid var(--glass-border);
+      border-radius: 32px;
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 255, 255, 0.08),
+        transparent 40%
+      );
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .glass-card:hover::after {
+      opacity: 1;
+    }
+    
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.12) 50%,
+        transparent 100%
+      );
+    }
+    
+    /* ========== TAGLINE CARD ========== */
+    .tagline-card {
+      padding: 24px 20px 16px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.06), rgba(255, 255, 255, 0.02));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 80px;
+    }
+    
+    .tagline-label {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--orange-light);
+      font-weight: 700;
+      width: 100%;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    .tagline-label::before,
+    .tagline-label::after {
+      content: '';
+      width: 12px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--orange-light), transparent);
+    }
+    
+    .tagline {
+      font-size: clamp(1.1rem, 6vw, 1.4rem);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+      color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: baseline;
+      gap: 0;
+    }
+    
+    .tagline-overlap-container {
+      position: relative;
+      display: inline-grid;
+      align-items: baseline;
+      justify-items: start;
+      margin-left: 0;
+    }
+    
+    .tagline-fade {
+      grid-area: 1/1;
+      color: rgba(255, 255, 255, 0.45);
+      text-decoration: line-through;
+      text-decoration-color: var(--orange);
+      text-decoration-thickness: 1.5px;
+    }
+    
+    .tagline-highlight {
+      grid-area: 1/1;
+      background: linear-gradient(135deg, var(--orange-light), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-style: italic;
+      font-weight: 900;
+      transform: translateY(0.35em) rotate(-2deg);
+      filter: drop-shadow(0 0 15px rgba(255, 107, 53, 0.4));
+      white-space: nowrap;
+    }
+    
+    /* ========== MAIN CONTENT ========== */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    /* ========== ACTION CARDS ========== */
+    .action-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 16px;
+      text-decoration: none;
+      color: white;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 18px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .action-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      border-color: rgba(255, 255, 255, 0.15);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.04) 100%
+      );
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+    
+    .action-card.primary {
+      background: linear-gradient(
+        135deg,
+        var(--orange) 0%,
+        var(--orange-dark) 100%
+      );
+      border: none;
+      box-shadow: 
+        0 10px 20px rgba(255, 107, 53, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      padding: 12px 16px;
+    }
+    
+    .action-card.primary::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        transparent 55%
+      );
+      animation: shimmer 6s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translate(-30%, -30%) rotate(0deg); }
+      100% { transform: translate(30%, 30%) rotate(0deg); }
+    }
+    
+    .action-icon {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      transition: transform 0.3s ease;
+    }
+
+    .action-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2px;
+    }
+    
+    .action-card:hover .action-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .action-card.primary .action-icon {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .action-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+    
+    .action-title {
+      display: block;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0px;
+      letter-spacing: -0.3px;
+    }
+    
+    .action-desc {
+      display: block;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 400;
+      line-height: 1.2;
+    }
+    
+    .action-card.primary .action-desc {
+      color: rgba(255, 255, 255, 0.85);
+    }
+    
+    .action-arrow {
+      width: 24px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .action-card:hover .action-arrow {
+      transform: translateX(6px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .action-arrow svg {
+      width: 12px;
+      height: 12px;
+      opacity: 0.8;
+    }
+    
+    /* ========== SERVICES SECTION ========== */
+    .services-section {
+      margin-top: 4px;
+    }
+    
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 2.2px;
+      color: rgba(255, 255, 255, 0.25);
+      margin-bottom: 12px;
+      padding-left: 4px;
+      font-weight: 700;
+    }
+    
+    .section-label::before {
+      content: '';
+      width: 16px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--orange), transparent);
+    }
+    
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    
+    .service-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 10px;
+      text-decoration: none;
+      color: white;
+      border-radius: 20px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .service-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    }
+    
+    .service-icon {
+      font-size: 1.4rem;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    .service-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 2px;
+      color: white;
+    }
+    
+    .service-card:hover .service-icon {
+      transform: scale(1.15) translateY(-2px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .service-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.55);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      line-height: 1.2;
+    }
+    
+    .service-card:hover .service-label {
+      color: white;
+    }
+    
+    /* ========== CONTACT SECTION ========== */
+    .contact-section {
+      margin-top: 8px;
+    }
+    
+    .contact-strip {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .contact-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 10px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      color: white;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      backdrop-filter: blur(16px);
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .contact-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .contact-btn svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0.7;
+    }
+    
+    .contact-btn.whatsapp {
+      background: rgba(37, 211, 102, 0.08);
+      border-color: rgba(37, 211, 102, 0.2);
+    }
+    
+    .contact-btn.whatsapp:hover {
+      background: rgba(37, 211, 102, 0.15);
+      border-color: rgba(37, 211, 102, 0.35);
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.15);
+    }
+    
+    .contact-btn.whatsapp svg {
+      color: #25D366;
+      opacity: 1;
+    }
+    
+    /* ========== FOOTER ========== */
+    .footer {
+      text-align: center;
+      padding-top: 20px;
+      padding-bottom: 12px;
+      margin-top: auto;
+    }
+    
+    .footer-text {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.25);
+      letter-spacing: 0.5px;
+    }
+    
+    .footer-text span {
+      background: linear-gradient(135deg, var(--orange-light), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+    
+    /* ========== MODAL STYLES ========== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal {
+      width: 100%;
+      max-width: 480px;
+      max-height: 85vh;
+      background: linear-gradient(
+        180deg,
+        var(--charcoal-light) 0%,
+        var(--charcoal) 100%
+      );
+      border: 1px solid var(--glass-border);
+      border-bottom: none;
+      border-radius: 32px 32px 0 0;
+      padding: 20px 28px calc(28px + var(--safe-bottom));
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .modal-overlay.active .modal {
+      transform: translateY(0);
+    }
+    
+    .modal-handle {
+      width: 44px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 2px;
+      margin: 0 auto 28px;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .modal-close svg {
+      width: 20px;
+      height: 20px;
+    }
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+    
+    .modal-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 32px rgba(255, 107, 53, 0.35);
+    }
+    
+    .modal-icon svg {
+      width: 28px;
+      height: 28px;
+      color: white;
+    }
+    
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+    
+    /* Steps */
+    .steps {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 28px;
+    }
+    
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+    }
+    
+    .step:not(:last-child) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    .step-num {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      color: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    
+    .step-content {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.55;
+      padding-top: 5px;
+    }
+    
+    .step-content strong {
+      color: white;
+      font-weight: 600;
+    }
+    
+    .keyword {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      color: white;
+      padding: 5px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-top: 8px;
+      margin-right: 4px;
+    }
+    
+    .keyword-or {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 500;
+      margin: 0 4px;
+    }
+    
+    .dots {
+      display: inline-flex;
+      gap: 3px;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 6px 10px;
+      border-radius: 8px;
+      vertical-align: middle;
+      margin: 0 6px;
+    }
+    
+    .dots span {
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+    }
+    
+    .modal-btn {
+      width: 100%;
+      padding: 20px;
+      border: none;
+      border-radius: 16px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      color: white;
+      box-shadow: 0 12px 32px rgba(255, 107, 53, 0.35);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+    
+    .modal-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 16px 48px rgba(255, 107, 53, 0.45),
+        0 0 60px rgba(255, 107, 53, 0.2);
+    }
+    
+    .modal-btn svg {
+      width: 22px;
+      height: 22px;
+    }
+    
+    /* Contact Form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.55);
+      letter-spacing: 0.3px;
+    }
+    
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 18px 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      color: white;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--orange);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 
+        0 0 0 4px rgba(255, 107, 53, 0.1),
+        0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+    
+    .form-textarea {
+      min-height: 120px;
+      resize: none;
+    }
+    
+    /* Success State */
+    .success-state {
+      text-align: center;
+      padding: 56px 24px;
+    }
+    
+    .success-icon {
+      width: 88px;
+      height: 88px;
+      background: linear-gradient(135deg, #10b981, #34d399);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      animation: scaleIn 0.4s ease;
+      box-shadow: 0 16px 48px rgba(16, 185, 129, 0.35);
+    }
+    
+    .success-icon svg {
+      width: 44px;
+      height: 44px;
+      color: white;
+    }
+    
+    .success-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    
+    .success-text {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 1rem;
+    }
+    
+    /* ========== ANIMATIONS ========== */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-up {
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    .delay-6 { animation-delay: 0.6s; }
+    .delay-7 { animation-delay: 0.7s; }
+    .delay-8 { animation-delay: 0.8s; }
+    
+    @keyframes scaleIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+    
+    /* ========== RESPONSIVE DESIGN ========== */
+    
+    /* Small devices (phones, 320px and up) */
+    @media (max-width: 390px) {
+      .app-container {
+        padding: calc(16px + var(--safe-top)) 16px calc(32px + var(--safe-bottom));
+        gap: 20px;
+      }
+
+      .hero-title {
+        font-size: 2.1rem;
+        letter-spacing: -1.2px;
+      }
+
+      .services-grid {
+        gap: 12px;
+      }
+      
+      .service-card {
+        padding: 16px 8px;
+        border-radius: 20px;
+      }
+      
+      .service-label {
+        font-size: 0.7rem;
+      }
+
+      .contact-strip {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .contact-btn.whatsapp {
+        grid-column: span 2;
+      }
+    }
+
+    /* Medium devices (tablets, 768px and up) */
+    @media (min-width: 768px) {
+      .app-container {
+        max-width: 640px;
+        padding: 40px;
+      }
+      
+      .logo-icon {
+        width: 44px;
+        height: 44px;
+      }
+      
+      .logo-text {
+        font-size: 1.5rem;
+      }
+      
+      .header-badge {
+        font-size: 0.8rem;
+        padding: 8px 16px;
+      }
+
+      .hero {
+        padding: 20px 0;
+      }
+      
+      .hero-icon {
+        width: 100px;
+        height: 100px;
+        font-size: 48px;
+        border-radius: 32px;
+      }
+
+      .hero-icon svg {
+        width: 56px;
+        height: 56px;
+      }
+      
+      .hero-title {
+        font-size: 3rem;
+      }
+      
+      .tagline-card {
+        padding: 40px 24px 32px;
+        min-height: 140px;
+      }
+      
+      .tagline {
+        font-size: 2rem;
+      }
+      
+      .action-card {
+        padding: 20px;
+        gap: 20px;
+      }
+      
+      .action-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 1.8rem;
+      }
+
+      .action-icon svg {
+        width: 28px;
+        height: 28px;
+      }
+      
+      .action-title {
+        font-size: 1.2rem;
+      }
+      
+      .action-desc {
+        font-size: 0.9rem;
+      }
+      
+      .services-grid {
+        gap: 16px;
+      }
+      
+      .service-card {
+        padding: 24px 16px;
+      }
+      
+      .service-icon {
+        font-size: 2rem;
+      }
+
+      .service-icon svg {
+        width: 32px;
+        height: 32px;
+      }
+      
+      .service-label {
+        font-size: 0.9rem;
+      }
+
+      .modal {
+        max-width: 540px;
+        border-radius: 32px;
+        margin: auto;
+        max-height: 80vh;
+        border: 1px solid var(--glass-border);
+      }
+      
+      .modal-overlay {
+        align-items: center;
+        padding: 24px;
+      }
+    }
+    
+    /* Large devices (desktops, 1024px and up) */
+    @media (min-width: 1024px) {
+      .app-container {
+        max-width: 860px;
+      }
+      
+      .services-grid {
+        gap: 24px;
+      }
+    }
+
+    /* Landscape mode for shorter screens */
+    @media (max-height: 650px) and (orientation: landscape) {
+      .hero {
+        padding: 20px 0 28px;
+      }
+      
+      .hero-icon {
+        width: 68px;
+        height: 68px;
+        font-size: 34px;
+        margin-bottom: 20px;
+        border-radius: 20px;
+      }
+      
+      .tagline-card {
+        padding: 32px 20px 24px;
+        margin-bottom: 18px;
+        min-height: 100px;
+      }
+      
+      .action-card {
+        padding: 18px;
+      }
+    }
+    
+    /* Landscape mode */
+    @media (max-height: 650px) {
+      .hero {
+        padding: 20px 0 28px;
+      }
+      
+      .hero-icon {
+        width: 68px;
+        height: 68px;
+        font-size: 34px;
+        margin-bottom: 20px;
+        border-radius: 20px;
+      }
+      
+      .tagline-card {
+        padding: 32px 20px 24px;
+        margin-bottom: 18px;
+        min-height: 100px;
+      }
+      
+      .action-card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Aurora Background -->
+  <div class="aurora-container">
+    <div class="aurora-layer aurora-1"></div>
+    <div class="aurora-layer aurora-2"></div>
+    <div class="aurora-layer aurora-3"></div>
+    <div class="aurora-layer aurora-4"></div>
+  </div>
+  <div class="vignette"></div>
+  <div class="noise"></div>
+  
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header animate-up delay-1">
+      <a href="https://www.umely.ai" class="logo-wrapper">
+        <div class="logo-icon">
+          <svg viewBox="0 0 375 375" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <clipPath id="brain-left"><path d="M 63.320312 63.863281 L 210.851562 63.863281 L 210.851562 311.117188 L 63.320312 311.117188 Z" clip-rule="nonzero"/></clipPath>
+              <clipPath id="brain-right"><path d="M 164.523438 63.863281 L 311.570312 63.863281 L 311.570312 311.117188 L 164.523438 311.117188 Z" clip-rule="nonzero"/></clipPath>
+            </defs>
+            <g clip-path="url(#brain-left)"><path fill="#fff" d="M 170.234375 170.546875 C 170.234375 165.464844 173.570312 161.417969 177.65625 161.417969 L 181.742188 161.417969 L 181.742188 101.015625 C 181.742188 94.585938 180.105469 87.859375 177.1875 83.820312 C 174.433594 79.980469 170.183594 76.410156 159.0625 76.410156 C 146.628906 76.410156 139.144531 74.945312 121.621094 87.121094 C 125.941406 84.117188 131.464844 90.75 135.550781 94.585938 C 136.804688 95.730469 137.054688 98.007812 136.136719 99.667969 C 135.132812 101.222656 133.300781 101.535156 131.964844 100.394531 C 129.210938 97.800781 126.042969 95.933594 122.957031 95.003906 C 114.699219 92.308594 108.195312 94.378906 101.9375 101.847656 C 98.769531 105.578125 96.183594 110.347656 94.515625 115.847656 C 95.765625 115.429688 97.015625 115.117188 98.269531 115.015625 C 102.1875 114.394531 106.441406 114.601562 110.527344 116.050781 C 112.113281 116.574219 113.03125 118.542969 112.613281 120.511719 C 112.195312 122.480469 110.613281 123.621094 109.027344 123.105469 C 96.933594 119.058594 87.839844 124.351562 82.671875 138.140625 C 80.667969 143.53125 79.5 149.652344 79.5 156.183594 C 79.5 159.921875 79.917969 163.546875 80.667969 167.179688 C 83.503906 164.273438 86.59375 162.097656 89.679688 160.644531 C 95.765625 157.84375 102.105469 157.535156 107.691406 158.984375 C 108.695312 155.5625 110.277344 152.039062 112.28125 148.820312 C 114.699219 144.882812 117.785156 141.355469 121.539062 138.660156 C 122.875 137.726562 124.707031 138.242188 125.542969 140.007812 C 126.292969 141.769531 125.875 144.050781 124.457031 144.984375 C 121.371094 147.265625 118.871094 150.066406 116.867188 153.28125 C 115.199219 156.082031 113.867188 159.085938 113.03125 162.097656 C 112.699219 163.132812 112.53125 164.691406 111.945312 165.621094 C 111.195312 166.867188 109.945312 167.382812 108.695312 166.972656 C 103.691406 164.898438 97.515625 164.792969 91.761719 167.488281 C 87.507812 169.457031 83.421875 172.984375 80.167969 178.273438 C 78.667969 181.28125 77.414062 184.496094 76.582031 188.125 C 75.664062 191.960938 75.082031 196.210938 75.082031 200.570312 C 75.082031 207.207031 76.25 213.324219 78.25 218.613281 C 79.835938 222.867188 82.003906 226.699219 84.589844 229.707031 C 85.757812 224.628906 87.757812 219.546875 90.761719 215.085938 C 94.515625 209.386719 99.769531 204.613281 106.609375 202.125 C 107.691406 198.183594 109.363281 194.140625 111.613281 190.511719 C 114.03125 186.570312 117.117188 183.042969 120.871094 180.347656 C 122.207031 179.414062 124.039062 179.933594 124.875 181.695312 C 125.710938 183.460938 125.207031 185.738281 123.789062 186.675781 C 120.789062 188.953125 118.203125 191.753906 116.199219 194.96875 C 114.367188 198.078125 112.949219 201.398438 112.113281 204.824219 C 113.367188 207.929688 115.285156 210.941406 117.535156 213.53125 C 119.953125 216.332031 122.875 218.613281 126.210938 220.0625 C 127.710938 220.789062 128.460938 222.867188 127.960938 224.730469 C 127.378906 226.699219 125.710938 227.636719 124.125 226.910156 C 120.121094 225.148438 116.535156 222.34375 113.617188 218.921875 C 111.113281 216.125 109.027344 212.910156 107.441406 209.488281 C 102.269531 211.558594 98.183594 215.296875 95.265625 219.753906 C 86.507812 233.027344 87.925781 251.488281 96.601562 264.347656 C 100.769531 270.671875 106.527344 274.816406 112.949219 275.753906 C 112.949219 273.367188 113.113281 270.980469 113.449219 268.597656 C 114.117188 263.722656 115.617188 258.851562 117.871094 254.289062 C 118.785156 252.625 120.539062 252.109375 121.957031 253.144531 C 123.289062 254.183594 123.707031 256.464844 122.875 258.226562 C 120.953125 261.855469 119.789062 265.902344 119.203125 269.839844 C 117.953125 278.550781 119.285156 286.644531 124.960938 292.449219 C 127.460938 295.039062 130.464844 296.496094 133.714844 296.496094 C 137.804688 296.496094 141.558594 294.105469 144.308594 290.269531 C 147.226562 286.226562 148.980469 280.417969 148.980469 273.992188 C 148.980469 269.945312 151.648438 266.730469 154.902344 266.730469 C 158.15625 266.730469 160.742188 269.945312 160.742188 273.992188 C 160.742188 284.050781 157.820312 293.277344 153.066406 299.914062 C 148.148438 306.863281 141.308594 311.117188 133.714844 311.117188 C 127.628906 311.117188 122.039062 308.417969 117.535156 303.753906 C 113.949219 300.121094 111.113281 295.351562 109.195312 289.753906 C 100.6875 287.886719 93.179688 282.078125 87.59375 273.675781 C 81.835938 265.070312 78.167969 253.871094 77.582031 241.53125 C 73.496094 236.96875 70.074219 231.265625 67.65625 224.835938 C 64.90625 217.574219 63.320312 209.28125 63.320312 200.570312 C 63.320312 194.761719 64.070312 189.160156 65.320312 183.871094 C 66.324219 179.621094 67.742188 175.578125 69.492188 171.949219 C 68.410156 166.761719 67.742188 161.472656 67.742188 156.183594 C 67.742188 147.476562 69.324219 139.28125 71.996094 132.023438 C 74.582031 125.28125 78.085938 119.371094 82.421875 114.703125 C 84.671875 105.476562 88.59375 97.386719 93.847656 91.269531 C 98.851562 85.359375 107.03125 83.195312 112.210938 78.253906 C 128.628906 62.597656 153.78125 63.890625 158.785156 63.890625 C 169.296875 63.890625 180.074219 68.960938 185.832031 75.089844 C 192.324219 82.007812 193.503906 90.953125 193.503906 101.015625 L 193.503906 161.417969 L 197.675781 161.417969 C 201.761719 161.417969 205.097656 165.464844 205.097656 170.546875 C 205.097656 178.738281 205.097656 186.824219 205.097656 194.914062 C 208.097656 194.914062 210.6875 196.675781 210.6875 200.929688 C 210.6875 204.144531 208.601562 206.839844 205.933594 206.839844 L 198.757812 206.839844 L 198.757812 225.816406 C 198.757812 230.378906 193.171875 230.378906 193.171875 225.816406 L 193.171875 206.839844 L 182.160156 206.839844 L 182.160156 225.816406 C 182.160156 230.378906 176.488281 230.378906 176.488281 225.816406 L 176.488281 206.839844 L 169.398438 206.839844 C 166.730469 206.839844 164.5625 204.144531 164.5625 200.929688 C 164.5625 196.675781 167.230469 194.914062 170.234375 194.914062 C 170.234375 186.824219 170.234375 170.546875 170.234375 170.546875"/></g>
+            <g clip-path="url(#brain-right)"><path fill="#fff" d="M 311.675781 174.410156 C 311.675781 165.703125 310.089844 157.40625 307.335938 150.144531 C 304.917969 143.714844 301.496094 138.011719 297.410156 133.449219 C 296.828125 121.109375 293.15625 109.910156 287.402344 101.304688 C 281.8125 92.902344 274.304688 87.09375 265.796875 85.226562 C 263.878906 79.628906 261.046875 74.859375 257.457031 71.226562 C 252.953125 66.5625 247.367188 63.863281 241.277344 63.863281 C 233.6875 63.863281 226.847656 68.117188 221.925781 75.066406 C 217.171875 81.703125 214.253906 90.929688 214.253906 100.988281 C 214.253906 105.035156 216.839844 108.25 220.09375 108.25 C 223.34375 108.25 226.015625 105.035156 226.015625 100.988281 C 226.015625 94.5625 227.765625 88.753906 230.683594 84.710938 C 233.4375 80.875 237.191406 78.484375 241.277344 78.484375 C 244.53125 78.484375 247.53125 79.941406 250.035156 82.53125 C 255.707031 88.335938 257.042969 96.429688 255.789062 105.140625 C 255.207031 109.078125 254.039062 113.125 252.121094 116.753906 C 251.285156 118.515625 251.703125 120.796875 253.039062 121.835938 C 254.457031 122.871094 256.207031 122.351562 257.125 120.691406 C 259.375 116.128906 260.878906 111.257812 261.546875 106.382812 C 261.882812 103.996094 262.046875 101.613281 262.046875 99.230469 C 268.46875 100.160156 274.222656 104.308594 278.394531 110.632812 C 287.066406 123.492188 288.488281 141.953125 279.730469 155.226562 C 276.808594 159.683594 272.722656 163.421875 267.550781 165.492188 C 265.96875 162.070312 263.878906 158.855469 261.378906 156.054688 C 258.457031 152.636719 254.875 149.832031 250.871094 148.074219 C 249.285156 147.34375 247.617188 148.28125 247.03125 150.25 C 246.53125 152.113281 247.285156 154.1875 248.785156 154.914062 C 252.121094 156.367188 255.039062 158.648438 257.457031 161.449219 C 259.710938 164.039062 261.628906 167.050781 262.882812 170.160156 C 262.046875 173.582031 260.628906 176.898438 258.792969 180.011719 C 256.792969 183.226562 254.207031 186.027344 251.203125 188.304688 C 249.785156 189.242188 249.285156 191.519531 250.121094 193.285156 C 250.953125 195.046875 252.789062 195.566406 254.121094 194.632812 C 257.875 191.9375 260.960938 188.410156 263.378906 184.46875 C 265.632812 180.839844 267.300781 176.796875 268.386719 172.855469 C 275.226562 170.363281 280.480469 165.597656 284.234375 159.894531 C 287.234375 155.433594 289.238281 150.351562 290.40625 145.273438 C 292.992188 148.28125 295.160156 152.113281 296.742188 156.367188 C 298.746094 161.65625 299.914062 167.773438 299.914062 174.410156 C 299.914062 178.765625 299.332031 183.019531 298.414062 186.855469 C 297.578125 190.484375 296.328125 193.699219 294.824219 196.707031 C 291.570312 201.996094 287.488281 205.523438 283.230469 207.492188 C 277.476562 210.1875 271.304688 210.085938 266.300781 208.007812 C 265.050781 207.597656 263.796875 208.113281 263.046875 209.359375 C 262.460938 210.289062 262.296875 211.847656 261.964844 212.882812 C 261.128906 215.890625 259.792969 218.898438 258.125 221.699219 C 256.125 224.914062 253.621094 227.710938 250.535156 229.996094 C 249.117188 230.929688 248.703125 233.210938 249.453125 234.972656 C 250.285156 236.738281 252.121094 237.253906 253.453125 236.320312 C 257.210938 233.625 260.296875 230.097656 262.714844 226.15625 C 264.714844 222.941406 266.300781 219.417969 267.300781 215.996094 C 272.886719 217.445312 279.226562 217.136719 285.316406 214.339844 C 288.402344 212.882812 291.488281 210.707031 294.324219 207.800781 C 295.074219 211.433594 295.492188 215.058594 295.492188 218.796875 C 295.492188 225.328125 294.324219 231.449219 292.324219 236.839844 C 287.152344 250.628906 278.0625 255.921875 265.96875 251.875 C 264.382812 251.359375 262.796875 252.5 262.382812 254.46875 C 261.964844 256.441406 262.882812 258.40625 264.464844 258.925781 C 268.550781 260.378906 272.804688 260.585938 276.726562 259.964844 C 277.976562 259.863281 279.226562 259.550781 280.480469 259.132812 C 278.8125 264.632812 276.226562 269.402344 273.054688 273.136719 C 266.800781 280.601562 260.296875 282.675781 252.039062 279.976562 C 248.949219 279.046875 245.78125 277.179688 243.03125 274.585938 C 241.695312 273.445312 239.859375 273.757812 238.859375 275.3125 C 237.941406 276.972656 238.191406 279.25 239.441406 280.394531 C 243.53125 284.230469 249.054688 290.859375 253.371094 287.859375 C 235.851562 300.035156 228.363281 298.570312 215.929688 298.570312 C 204.8125 298.570312 200.558594 294.996094 197.808594 291.164062 C 195.152344 287.484375 193.5625 281.585938 193.292969 275.710938 L 193.507812 275.710938 L 193.507812 275.707031 L 197.59375 275.707031 C 201.679688 275.707031 205.015625 271.664062 205.015625 266.582031 C 205.015625 266.582031 205.015625 250.300781 205.015625 242.214844 C 208.019531 242.214844 210.6875 240.453125 210.6875 236.199219 C 210.6875 232.984375 208.519531 230.289062 205.847656 230.289062 L 198.761719 230.289062 L 198.761719 230.007812 L 198.683594 230.007812 L 198.683594 246.214844 C 198.683594 250.777344 193.097656 250.777344 193.097656 246.214844 L 193.097656 230.007812 L 193.089844 230.007812 L 193.089844 230.289062 L 182.085938 230.289062 L 182.085938 246.214844 C 182.085938 250.777344 176.414062 250.777344 176.414062 246.214844 L 176.414062 230.289062 L 169.316406 230.289062 C 166.648438 230.289062 164.5625 232.984375 164.5625 236.199219 C 164.5625 240.453125 167.148438 242.214844 170.152344 242.214844 C 170.152344 250.300781 170.152344 258.390625 170.152344 266.582031 C 170.152344 271.664062 173.488281 275.707031 177.574219 275.707031 L 181.503906 275.707031 C 181.648438 285.058594 183.046875 293.375 189.164062 299.890625 C 194.917969 306.019531 205.695312 311.089844 216.207031 311.089844 C 221.214844 311.089844 246.367188 312.382812 262.785156 296.726562 C 267.960938 291.785156 276.140625 289.621094 281.148438 283.710938 C 286.402344 277.59375 290.320312 269.503906 292.574219 260.277344 C 296.910156 255.609375 300.414062 249.699219 303 242.957031 C 305.667969 235.699219 307.253906 227.503906 307.253906 218.796875 C 307.253906 213.507812 306.585938 208.21875 305.503906 203.03125 C 307.253906 199.402344 308.671875 195.359375 309.671875 191.105469 C 310.921875 185.820312 311.675781 180.21875 311.675781 174.410156"/></g>
+          </svg>
+        </div>
+        <span class="logo-text">Umely</span>
+      </a>
+      <div class="header-badge">Jouw AI partner</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero animate-up delay-2">
+      <div class="hero-icon">🦾</div>
+      <h1 class="hero-title">Bedankt voor je aandacht!</h1>
+      <p class="hero-subtitle">Tof dat je bij onze AI lezing was!</p>
+    </section>
+    
+    <!-- Tagline Card -->
+    <div class="tagline-card glass-card animate-up delay-3">
+      <p class="tagline-label">Onthoud dit</p>
+      <p class="tagline">
+        AI: Jouw ver<span class="tagline-overlap-container">
+          <span class="tagline-fade">vanger</span>
+          <span class="tagline-highlight">sterker</span>
+        </span>
+      </p>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Action Cards -->
+      <button class="action-card glass-card primary animate-up delay-4" onclick="openHandoutModal()">
+        <div class="action-icon"><i data-lucide="file-text"></i></div>
+        <div class="action-content">
+          <span class="action-title">Hand-out ontvangen</span>
+          <span class="action-desc">Slides & AI tips via LinkedIn</span>
+        </div>
+        <div class="action-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </div>
+      </button>
+      
+      <button class="action-card glass-card animate-up delay-5" onclick="openCollaborationModal()">
+        <div class="action-icon"><i data-lucide="rocket"></i></div>
+        <div class="action-content">
+          <span class="action-title">Samenwerken met Umely</span>
+          <span class="action-desc">Stuur een connectieverzoek via LinkedIn</span>
+        </div>
+        <div class="action-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </div>
+      </button>
+      
+      <!-- Services Grid -->
+      <div class="services-section animate-up delay-6">
+        <p class="section-label">Ontdek meer</p>
+        <div class="services-grid">
+          <a href="https://umely.ai/ai-lezing/" target="_blank" class="service-card glass-card">
+            <span class="service-icon"><i data-lucide="mic"></i></span>
+            <span class="service-label">Lezingen</span>
+          </a>
+          <a href="https://umely.ai/al-workshop/" target="_blank" class="service-card glass-card">
+            <span class="service-icon"><i data-lucide="wrench"></i></span>
+            <span class="service-label">Workshops</span>
+          </a>
+          <a href="https://umely.ai/ai-agents/" target="_blank" class="service-card glass-card">
+            <span class="service-icon"><i data-lucide="bot"></i></span>
+            <span class="service-label">Custom AI oplossing</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Contact Strip -->
+      <div class="contact-section animate-up delay-7">
+        <p class="section-label">Direct contact</p>
+        <div class="contact-strip">
+          <a href="https://wa.me/message/3TZZ7NLHNQLEN1" target="_blank" class="contact-btn whatsapp">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            WhatsApp
+          </a>
+          <a href="mailto:info@umely.ai" class="contact-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            E-mail
+          </a>
+          <a href="https://www.linkedin.com/in/sonny-de-leeuw/" target="_blank" class="contact-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer animate-up delay-8">
+      <p class="footer-text">© 2025 Umely • AI: <span>Maak het je beste vriend</span></p>
+    </footer>
+  </div>
+
+  <!-- Hand-out Modal -->
+  <div class="modal-overlay" id="handoutModal" onclick="closeModal(event, 'handoutModal')">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <button class="modal-close" onclick="closeModalById('handoutModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      
+      <div class="modal-header">
+        <div class="modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+        </div>
+        <h2 class="modal-title" id="modalTitle">Hand-out ontvangen</h2>
+      </div>
+      
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            Klik op de knop en ga naar <strong>LinkedIn</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            Klik op <span class="dots"><span></span><span></span><span></span></span> → <strong>"Connectie maken"</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            Klik op <strong>"Opmerking toevoegen"</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            Typ in je bericht:<br>
+            <div id="modalKeywordContainer">
+              <span class="keyword">handout</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <a href="https://www.linkedin.com/in/sonny-de-leeuw/" target="_blank" class="modal-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+        Open LinkedIn
+      </a>
+    </div>
+  </div>
+
+  <!-- Contact Modal -->
+  <div class="modal-overlay" id="contactModal" onclick="closeModal(event, 'contactModal')">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <button class="modal-close" onclick="closeModalById('contactModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      
+      <div id="contactFormContainer">
+        <div class="modal-header">
+          <div class="modal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <h2 class="modal-title">Neem contact op</h2>
+        </div>
+        
+        <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
+          <div class="form-group">
+            <label class="form-label" for="name">Je naam</label>
+            <input type="text" id="name" name="name" class="form-input" placeholder="Bijv. Jan de Vries" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="email">E-mailadres</label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="jan@voorbeeld.nl" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="message">Je bericht</label>
+            <textarea id="message" name="message" class="form-textarea" placeholder="Vertel over je interesse..." required></textarea>
+          </div>
+        </form>
+        
+        <button type="submit" form="contactForm" class="modal-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          Verstuur bericht
+        </button>
+      </div>
+      
+      <div id="contactSuccess" style="display: none;">
+        <div class="success-state">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="success-title">Bericht verzonden!</h3>
+          <p class="success-text">Sonny neemt zo snel mogelijk contact met je op.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Modal functions
+    function openLinkedInModal(title, keywordHtml) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalKeywordContainer').innerHTML = keywordHtml;
+      document.getElementById('handoutModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function openHandoutModal() {
+      openLinkedInModal('Hand-out ontvangen', '<span class="keyword">handout</span>');
+    }
+
+    function openCollaborationModal() {
+      const html = `
+        <span class="keyword">lezing</span>
+        <span class="keyword-or">of</span>
+        <span class="keyword">workshop</span>
+        <span class="keyword-or">of</span>
+        <span class="keyword">Custom AI oplossing</span>
+      `;
+      openLinkedInModal('Samenwerken met Umely', html);
+    }
+    
+    function openContactModal() {
+      document.getElementById('contactModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal(event, modalId) {
+      if (event.target.classList.contains('modal-overlay')) {
+        document.getElementById(modalId).classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+    
+    function closeModalById(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    // Contact form submission
+    function submitContact(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
+      
+      // Create mailto link
+      const subject = encodeURIComponent(`Contact via Umely - ${name}`);
+      const body = encodeURIComponent(`Naam: ${name}\nE-mail: ${email}\n\nBericht:\n${message}`);
+      window.location.href = `mailto:info@umely.ai?subject=${subject}&body=${body}`;
+      
+      // Show success state
+      document.getElementById('contactFormContainer').style.display = 'none';
+      document.getElementById('contactSuccess').style.display = 'block';
+    }
+    
+    // Handle escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+          modal.classList.remove('active');
+        });
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // Swipe down to close on mobile
+    let touchStartY = 0;
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+      
+      modal.addEventListener('touchmove', (e) => {
+        const touchY = e.touches[0].clientY;
+        const diff = touchY - touchStartY;
+        
+        if (diff > 100 && modal.scrollTop === 0) {
+          modal.closest('.modal-overlay').classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }, { passive: true });
+    });
+    // Spotlight effect
+    document.addEventListener('mousemove', (e) => {
+      document.querySelectorAll('.glass-card').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+
+    // Mobile touch spotlight
+    document.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      document.querySelectorAll('.glass-card').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    }, { passive: true });
+
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+
+</body>
+</html>
