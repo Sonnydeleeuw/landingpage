@@ -1341,11 +1341,11 @@
     <!-- Main Content -->
     <main class="main-content">
       <!-- Action Cards -->
-      <button class="action-card glass-card primary animate-up delay-4" onclick="openHandoutModal()">
+      <button class="action-card glass-card primary animate-up delay-4" onclick="openContactModal('Ik ontvang graag de besproken AI-tools + aanraders.')">
         <div class="action-icon"><i data-lucide="file-text"></i></div>
         <div class="action-content">
           <span class="action-title">Hand-out ontvangen</span>
-          <span class="action-desc">Slides & AI tips via LinkedIn</span>
+          <span class="action-desc">Besproken AI-tools + aanraders</span>
         </div>
         <div class="action-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1354,11 +1354,11 @@
         </div>
       </button>
       
-      <button class="action-card glass-card animate-up delay-5" onclick="openCollaborationModal()">
+      <button class="action-card glass-card animate-up delay-5" onclick="openContactModal('Ik zou graag vrijblijvend willen sparren over de mogelijkheden.')">
         <div class="action-icon"><i data-lucide="rocket"></i></div>
         <div class="action-content">
           <span class="action-title">Samenwerken met Umely</span>
-          <span class="action-desc">Stuur een connectieverzoek via LinkedIn</span>
+          <span class="action-desc">Ga vrijblijvend met ons in gesprek</span>
         </div>
         <div class="action-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1417,65 +1417,6 @@
     <footer class="footer animate-up delay-8">
       <p class="footer-text">© 2025 Umely • AI: <span>Maak het je beste vriend</span></p>
     </footer>
-  </div>
-
-  <!-- Hand-out Modal -->
-  <div class="modal-overlay" id="handoutModal" onclick="closeModal(event, 'handoutModal')">
-    <div class="modal" onclick="event.stopPropagation()">
-      <div class="modal-handle"></div>
-      <button class="modal-close" onclick="closeModalById('handoutModal')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
-      </button>
-      
-      <div class="modal-header">
-        <div class="modal-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-          </svg>
-        </div>
-        <h2 class="modal-title" id="modalTitle">Hand-out ontvangen</h2>
-      </div>
-      
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            Klik op de knop en ga naar <strong>LinkedIn</strong>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            Klik op <span class="dots"><span></span><span></span><span></span></span> → <strong>"Connectie maken"</strong>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            Klik op <strong>"Opmerking toevoegen"</strong>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            Typ in je bericht:<br>
-            <div id="modalKeywordContainer">
-              <span class="keyword">handout</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <a href="https://www.linkedin.com/in/sonny-de-leeuw/" target="_blank" class="modal-btn">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-        Open LinkedIn
-      </a>
-    </div>
   </div>
 
   <!-- Contact Modal -->
@@ -1539,30 +1480,12 @@
   </div>
 
   <script>
-    // Modal functions
-    function openLinkedInModal(title, keywordHtml) {
-      document.getElementById('modalTitle').textContent = title;
-      document.getElementById('modalKeywordContainer').innerHTML = keywordHtml;
-      document.getElementById('handoutModal').classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function openHandoutModal() {
-      openLinkedInModal('Hand-out ontvangen', '<span class="keyword">handout</span>');
-    }
-
-    function openCollaborationModal() {
-      const html = `
-        <span class="keyword">lezing</span>
-        <span class="keyword-or">of</span>
-        <span class="keyword">workshop</span>
-        <span class="keyword-or">of</span>
-        <span class="keyword">Custom AI oplossing</span>
-      `;
-      openLinkedInModal('Samenwerken met Umely', html);
-    }
-    
-    function openContactModal() {
+    function openContactModal(messageText = '') {
+      if (messageText) {
+        document.getElementById('message').value = messageText;
+      } else {
+        document.getElementById('message').value = '';
+      }
       document.getElementById('contactModal').classList.add('active');
       document.body.style.overflow = 'hidden';
     }
