@@ -1341,7 +1341,7 @@
     <!-- Main Content -->
     <main class="main-content">
       <!-- Action Cards -->
-      <button class="action-card glass-card primary animate-up delay-4" onclick="openContactModal('Ik ontvang graag de besproken AI-tools + aanraders.')">
+      <button class="action-card glass-card primary animate-up delay-4" onclick="openModal('handoutModal')">
         <div class="action-icon"><i data-lucide="file-text"></i></div>
         <div class="action-content">
           <span class="action-title">Hand-out ontvangen</span>
@@ -1354,7 +1354,7 @@
         </div>
       </button>
       
-      <button class="action-card glass-card animate-up delay-5" onclick="openContactModal('Ik zou graag vrijblijvend willen sparren over de mogelijkheden.')">
+      <button class="action-card glass-card animate-up delay-5" onclick="openModal('samenwerkModal')">
         <div class="action-icon"><i data-lucide="rocket"></i></div>
         <div class="action-content">
           <span class="action-title">Samenwerken met Umely</span>
@@ -1479,7 +1479,116 @@
     </div>
   </div>
 
+  <!-- Handout Modal -->
+  <div class="modal-overlay" id="handoutModal" onclick="closeModal(event, 'handoutModal')">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <button class="modal-close" onclick="closeModalById('handoutModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i data-lucide="file-text"></i>
+        </div>
+        <h2 class="modal-title">Hand-out ontvangen</h2>
+      </div>
+      
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            Open mijn <strong>LinkedIn profiel</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            Klik op <strong>"Connectie maken"</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            Opmerking toevoegen met:
+            <span class="keyword">handout</span>
+          </div>
+        </div>
+      </div>
+      
+      <a href="https://www.linkedin.com/in/sonny-de-leeuw/" target="_blank" class="modal-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+        Open LinkedIn profiel
+      </a>
+    </div>
+  </div>
+
+  <!-- Samenwerken Modal -->
+  <div class="modal-overlay" id="samenwerkModal" onclick="closeModal(event, 'samenwerkModal')">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <button class="modal-close" onclick="closeModalById('samenwerkModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i data-lucide="rocket"></i>
+        </div>
+        <h2 class="modal-title">Samenwerken met Umely</h2>
+      </div>
+      
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            Open mijn <strong>LinkedIn profiel</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            Klik op <strong>"Connectie maken"</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            Opmerking toevoegen met:
+            <div style="margin-top: 8px;">
+              <span class="keyword">lezing</span>
+              <span class="keyword-or">of</span>
+              <span class="keyword">workshop</span>
+              <span class="keyword-or">of</span>
+              <span class="keyword">custom oplossing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <a href="https://www.linkedin.com/in/sonny-de-leeuw/" target="_blank" class="modal-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+        Open LinkedIn profiel
+      </a>
+    </div>
+  </div>
+
   <script>
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('active');
+      document.body.style.overflow = 'hidden';
+      // Re-initialize Lucide icons for the modal
+      lucide.createIcons();
+    }
+    
     function openContactModal(messageText = '') {
       if (messageText) {
         document.getElementById('message').value = messageText;
